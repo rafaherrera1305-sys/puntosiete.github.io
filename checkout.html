@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="checkout.css">
+</head>
+<body>
+    <div class="ticket">
+        <h1>Resumen de compra</h1>
+        <table id="checkoutTable">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <!-- Descuento -->
+        <div class="discount">
+            <p class="note">El descuento se aplica presentando este ticket en el local</p>
+            <p class="discount-text">Descuento 5%: <span id="discountAmount"></span></p>
+        </div>
+
+        <!-- Subtotal sin descuento -->
+        <p id="subtotal" class="subtotal-text"></p>
+
+        <!-- Total final -->
+        <h2 id="totalFinal"></h2>
+    </div>
+
+    <script>
+        // Recuperar datos del carrito
+        const data = JSON.parse(localStorage.getItem("checkoutData")) || { productos: [], total: 0 };
+        const tbody = document.querySelector("#checkoutTable tbody");
+
+        data.productos.forEach(p => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+            <td>${p.nombre}</td>
+            <td>${p.cantidad}</td>
+            <td>$${p.precioUnitario}</td>
+            <td>$${p.subtotal}</td>
+          `;
+            tbody.appendChild(row);
+        });
+
+        // Calcular descuento
+        const descuento = data.total * 0.05;
+        const totalFinal = data.total - descuento;
+
+        // Mostrar subtotal sin descuento
+        document.getElementById("subtotal").textContent = "Subtotal sin descuento: $" + data.total.toFixed(2);
+
+        // Mostrar descuento y total final
+        document.getElementById("discountAmount").textContent = "$" + descuento.toFixed(2);
+        document.getElementById("totalFinal").textContent = "Total a pagar: $" + totalFinal.toFixed(2);
+    </script>
+</body>
+</html>

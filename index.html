@@ -2,368 +2,44 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de prueba</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: Arial, sans-serif;
-        }
-
-        .hero {
-            background-color: white;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .hero-content {
-            display: flex;
-            flex: 1;
-            gap: 20px;
-        }
-
-        .carousel {
-            position: relative;
-            flex: 1;
-            overflow: hidden;
-            border-radius: 8px;
-        }
-
-        .slides {
-            display: flex;
-            transition: transform 0.5s ease-in-out;
-            height: 100%;
-        }
-
-            .slides img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                flex-shrink: 0;
-            }
-
-        .carousel-buttons {
-            position: absolute;
-            top: 50%;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            transform: translateY(-50%);
-        }
-
-            .carousel-buttons button {
-                background: rgba(0,0,0,0.5);
-                border: none;
-                color: white;
-                font-size: 2em;
-                cursor: pointer;
-                padding: 5px 10px;
-            }
-
-        .horarios {
-            flex: 1;
-            background: #f4f4f4;
-            padding: 20px;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            text-align: left;
-        }
-
-            .horarios h2 {
-                margin-bottom: 10px;
-            }
-
-            .horarios ul {
-                list-style: none;
-                padding: 0;
-                margin: 0;
-            }
-
-            .horarios li {
-                margin: 5px 0;
-            }
-
-        /* Carrito indicador */
-        .cart-indicator {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #333;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 20px;
-            display: none;
-        }
-
-        /* Catálogo */
-        .catalogo {
-            padding: 50px;
-            background: #eaeaea;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 20px;
-        }
-
-        .producto {
-            background: white;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-        }
-
-            .producto img {
-                width: 100%;
-                height: 150px;
-                object-fit: cover;
-                border-radius: 5px;
-            }
-
-            .producto h3 {
-                margin: 10px 0;
-            }
-
-            .producto p {
-                margin: 5px 0;
-            }
-
-            .producto .controls {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                gap: 10px;
-                margin-top: 10px;
-            }
-
-            .producto button {
-                background: #1e90ff;
-                color: white;
-                border: none;
-                padding: 5px 10px;
-                border-radius: 5px;
-                cursor: pointer;
-            }
-
-                .producto button:hover {
-                    background: #0d6efd;
-                }
-    </style>
+    <title>Catálogo del Almacén</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <section class="hero">
-        <div class="hero-content">
-            <div class="carousel">
-                <div class="slides">
-                    <img src="Imagenes/slide1.jpg" alt="Imagen 1">
-                    <img src="Imagenes/slide2.jpg" alt="Imagen 2">
-                    <img src="Imagenes/slide3.jpg" alt="Imagen 3">
-                </div>
-                <div class="carousel-buttons">
-                    <button id="prev">&#10094;</button>
-                    <button id="next">&#10095;</button>
-                </div>
-            </div>
-
-            <div class="horarios">
-                <h2>Horarios</h2>
-                <ul>
-                    <li>Lunes a Viernes: 9:00 - 18:00</li>
-                    <li>Sábado: 10:00 - 14:00</li>
-                    <li>Domingo: Cerrado</li>
-                </ul>
-
-                <h2>Ubicación</h2>
-                <ul>
-                    <li>Jaime Gil 280, Río Cuarto, Argentina</li>
-                </ul>
-            </div>
+    <header>
+        <h1>Catálogo del Almacén</h1>
+        <div id="cartArea" class="hidden">
+            <span id="cartIndicator">🛒 Total: $0</span>
+            <button id="checkoutBtn">Obtener descuento</button>
         </div>
-    </section>
+        <button id="adminLoginBtn">Acceso Administrador</button>
+        <button id="logoutBtn" class="hidden">Cerrar Sesión</button>
+    </header>
 
-    <!-- Indicador del carrito -->
-    <div id="cart" class="cart-indicator">Total: $0</div>
 
-    <!-- Catálogo de productos -->
-    <section class="catalogo">
-        <div class="producto" data-price="100">
-            <img src="Imagenes/slide1.jpg" alt="Producto A">
-            <h3>Producto A</h3>
-            <p>Precio: $100</p>
-            <div class="controls">
-                <button onclick="updateCart(this, -1)">-</button>
-                <span class="cantidad">0</span>
-                <button onclick="updateCart(this, 1)">+</button>
-            </div>
+    <main>
+        <div id="productList" class="product-list"></div>
+    </main>
+
+    <!-- Modal login -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span id="closeModal">&times;</span>
+            <h2>Acceso Administrador</h2>
+            <input type="password" id="adminPassword" placeholder="Contraseña">
+            <button id="loginBtn">Ingresar</button>
         </div>
+    </div>
 
-        <div class="producto" data-price="200">
-            <img src="Imagenes/slide1.jpg" alt="Producto B">
-            <h3>Producto B</h3>
-            <p>Precio: $200</p>
-            <div class="controls">
-                <button onclick="updateCart(this, -1)">-</button>
-                <span class="cantidad">0</span>
-                <button onclick="updateCart(this, 1)">+</button>
-            </div>
-        </div>
+    <!-- Panel administración -->
+    <div id="adminPanel" class="admin-panel hidden">
+        <h2>Cargar Producto</h2>
+        <input type="text" id="productName" placeholder="Nombre del producto">
+        <input type="number" id="productPrice" placeholder="Precio">
+        <input type="file" id="productImage" accept="image/*">
+        <button id="addProductBtn">Agregar Producto</button>
+    </div>
 
-        <div class="producto" data-price="200">
-            <img src="Imagenes/slide1.jpg" alt="Producto B">
-            <h3>Producto B</h3>
-            <p>Precio: $200</p>
-            <div class="controls">
-                <button onclick="updateCart(this, -1)">-</button>
-                <span class="cantidad">0</span>
-                <button onclick="updateCart(this, 1)">+</button>
-            </div>
-        </div>
-
-        <div class="producto" data-price="200">
-            <img src="Imagenes/slide1.jpg" alt="Producto B">
-            <h3>Producto B</h3>
-            <p>Precio: $200</p>
-            <div class="controls">
-                <button onclick="updateCart(this, -1)">-</button>
-                <span class="cantidad">0</span>
-                <button onclick="updateCart(this, 1)">+</button>
-            </div>
-        </div>
-
-        <div class="producto" data-price="200">
-            <img src="Imagenes/slide1.jpg" alt="Producto B">
-            <h3>Producto B</h3>
-            <p>Precio: $200</p>
-            <div class="controls">
-                <button onclick="updateCart(this, -1)">-</button>
-                <span class="cantidad">0</span>
-                <button onclick="updateCart(this, 1)">+</button>
-            </div>
-        </div>
-
-        <div class="producto" data-price="200">
-            <img src="Imagenes/slide1.jpg" alt="Producto B">
-            <h3>Producto B</h3>
-            <p>Precio: $200</p>
-            <div class="controls">
-                <button onclick="updateCart(this, -1)">-</button>
-                <span class="cantidad">0</span>
-                <button onclick="updateCart(this, 1)">+</button>
-            </div>
-        </div>
-
-        <div class="producto" data-price="200">
-            <img src="Imagenes/slide1.jpg" alt="Producto B">
-            <h3>Producto B</h3>
-            <p>Precio: $200</p>
-            <div class="controls">
-                <button onclick="updateCart(this, -1)">-</button>
-                <span class="cantidad">0</span>
-                <button onclick="updateCart(this, 1)">+</button>
-            </div>
-        </div>
-
-        <div class="producto" data-price="200">
-            <img src="Imagenes/slide1.jpg" alt="Producto B">
-            <h3>Producto B</h3>
-            <p>Precio: $200</p>
-            <div class="controls">
-                <button onclick="updateCart(this, -1)">-</button>
-                <span class="cantidad">0</span>
-                <button onclick="updateCart(this, 1)">+</button>
-            </div>
-        </div>
-
-        <div class="producto" data-price="200">
-            <img src="Imagenes/slide1.jpg" alt="Producto B">
-            <h3>Producto B</h3>
-            <p>Precio: $200</p>
-            <div class="controls">
-                <button onclick="updateCart(this, -1)">-</button>
-                <span class="cantidad">0</span>
-                <button onclick="updateCart(this, 1)">+</button>
-            </div>
-        </div>
-
-        <div class="producto" data-price="200">
-            <img src="Imagenes/slide1.jpg" alt="Producto B">
-            <h3>Producto B</h3>
-            <p>Precio: $200</p>
-            <div class="controls">
-                <button onclick="updateCart(this, -1)">-</button>
-                <span class="cantidad">0</span>
-                <button onclick="updateCart(this, 1)">+</button>
-            </div>
-        </div>
-
-        <div class="producto" data-price="150">
-            <img src="Imagenes/slide1.jpg" alt="Producto C">
-            <h3>Producto C</h3>
-            <p>Precio: $150</p>
-            <div class="controls">
-                <button onclick="updateCart(this, -1)">-</button>
-                <span class="cantidad">0</span>
-                <button onclick="updateCart(this, 1)">+</button>
-            </div>
-        </div>
-    </section>
-
-    <script>
-        // Carrusel
-        const slides = document.querySelector('.slides');
-        const images = document.querySelectorAll('.slides img');
-        const prevBtn = document.getElementById('prev');
-        const nextBtn = document.getElementById('next');
-        let index = 0;
-
-        function showSlide(i) {
-            index = (i + images.length) % images.length;
-            slides.style.transform = `translateX(${-index * 100}%)`;
-        }
-
-        prevBtn.addEventListener('click', () => showSlide(index - 1));
-        nextBtn.addEventListener('click', () => showSlide(index + 1));
-        setInterval(() => showSlide(index + 1), 5000);
-
-        // Carrito
-        let total = 0;
-        const cart = document.getElementById('cart');
-
-        function updateCart(button, change) {
-            const producto = button.closest('.producto');
-            const price = parseInt(producto.dataset.price);
-            const cantidadSpan = producto.querySelector('.cantidad');
-            let cantidad = parseInt(cantidadSpan.textContent);
-
-            cantidad = Math.max(0, cantidad + change);
-            cantidadSpan.textContent = cantidad;
-
-            // recalcular total
-            recalcularTotal();
-        }
-
-        function recalcularTotal() {
-            total = 0;
-            const productos = document.querySelectorAll('.producto');
-            productos.forEach(p => {
-                const price = parseInt(p.dataset.price);
-                const cantidad = parseInt(p.querySelector('.cantidad').textContent);
-                total += price * cantidad;
-            });
-
-            if (total > 0) {
-                cart.textContent = `Total: $${total}`;
-                cart.style.display = 'block';
-            } else {
-                cart.style.display = 'none';
-            }
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
